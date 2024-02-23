@@ -1,95 +1,79 @@
-# Importa a classe ABC (Abstract Base Class) e o decorador abstractmethod
 from abc import ABC, abstractmethod
 
-# Escopo global para armazenar os gatinhos disponíveis
-gatinhos_disponiveis = []
-
-# Classe principal para os gatinhos
-class Gatinho:
-    # Inicializa um objeto Gatinho com nome, idade e cor
+class Animal(ABC):  # Classe abstrata Animal
     def __init__(self, nome, idade, cor):
-        self.__nome = nome  # Atributo privado para o nome do gatinho
-        self.__idade = idade  # Atributo privado para a idade do gatinho
-        self.__cor = cor  # Atributo privado para a cor do gatinho
-        self.__adotado = False  # Atributo privado para indicar se o gatinho foi adotado
-
-    # Retorna o nome do gatinho
+        self.__nome = nome
+        self.__idade = idade
+        self.__cor = cor
+        self.__adotado = False
+        
     def get_nome(self):
         return self.__nome
 
-    # Retorna a idade do gatinho
     def get_idade(self):
         return self.__idade
 
-    # Retorna a cor do gatinho
     def get_cor(self):
         return self.__cor
 
-    # Retorna True se o gatinho foi adotado, False caso contrário
-    def adotado(self):
-        return self.__adotado
-
-    # Marca o gatinho como adotado
-    def adotar(self):
-        self.__adotado = True  # Define o atributo adotado como True
-        print(f"{self.__nome} foi adotado!")  # Imprime uma mensagem informando que o gatinho foi adotado
-
-# Classe para adoção de gatinhos
-class AdocaoGatinho:
-    # Inicializa um objeto de adoção com o nome do adotante
-    def __init__(self, adotante):
-        self.adotante = adotante  # Atributo público para o nome do adotante
-
-    # Adota um gatinho
-    def adotar_gatinho(self, gatinho):
-        if not gatinho.adotado():  # Verifica se o gatinho não foi adotado
-            gatinho.adotar()  # Marca o gatinho como adotado
-            print(f"{self.adotante} adotou {gatinho.get_nome()}")  # Imprime uma mensagem informando sobre a adoção
-        else:
-            print(f"{gatinho.get_nome()} já foi adotado.")  # Imprime uma mensagem informando que o gatinho já foi adotado
-
-# Subclasse de Gatinho com características especiais
-class GatinhoEspecial(Gatinho):
-    # Inicializa um objeto GatinhoEspecial com nome, idade, cor e característica especial
-    def __init__(self, nome, idade, cor, caracteristica_especial):
-        super().__init__(nome, idade, cor)  # Chama o construtor da classe base Gatinho
-        self.caracteristica_especial = caracteristica_especial  # Atributo público para a característica especial do gatinho
-
-# Classe abstrata para animais
-class Animal(ABC):
-    # Método abstrato que deve ser implementado pelas subclasses
     @abstractmethod
-    def fazer_som(self):
+    def fazer_som(self):  # Método abstrato que deve ser implementado nas subclasses
         pass
 
-# Classe Gato que herda de Gatinho e implementa Animal
-class Gato(Gatinho, Animal):
-    # Inicializa um objeto Gato com nome, idade, cor, raça
+class Gato(Animal):
     def __init__(self, nome, idade, cor, raca):
-        Gatinho.__init__(self, nome, idade, cor)  # Chama o construtor da classe base Gatinho
-        self.__raca = raca  # Atributo privado para a raça do gato
+        super().__init__(nome, idade, cor)
+        self.__raca = raca
+        
+    def get_raca(self):
+        return self.__raca
+    
+    def fazer_som(self):  # Implementação do método abstrato fazer_som para a classe Gato
+        return "Miau"
 
-    # Retorna o som emitido pelo gato
-    def fazer_som(self):
-        return "Miau"  # Retorna uma string representando o som de um gato
+class Adotante:
+    def __init__(self, nome):
+        self.nome = nome
 
-# Exemplo de uso do sistema
-if __name__ == "__main__":
-    # Criando alguns gatinhos
-    gato1 = Gatinho("Bolinha", 2, "branco")
-    gato2 = GatinhoEspecial("Frajola", 1, "preto e branco", "Manchas pretas")
-    gato3 = Gato("Whiskas", 3, "amarelo", "Persa")
+class AdocaoGatinho:
+    def __init__(self, animal, adotante):
+        self.animal = animal
+        self.adotante = adotante
 
-    # Criando uma lista de gatinhos disponíveis
-    gatinhos_disponiveis.extend([gato1, gato2, gato3])
+############## TESTES ###################
+#gatinho1 = Animal("Bolinha", 2, "branco")
+#gatinho2 = Animal("Frajola", 1, "preto e branco")
 
-    # Adotando um gatinho
-    adocao1 = AdocaoGatinho("João")
-    adocao1.adotar_gatinho(gato1)
+# Testando os métodos da classe Gato
+#print("Nome do gatinho 1:", gatinho1.get_nome())
+#print("Idade do gatinho 1:", gatinho1.get_idade())
+#print("Cor do gatinho 1:", gatinho1.get_cor())
 
-    # Tentando adotar um gatinho já adotado
-    adocao2 = AdocaoGatinho("Maria")
-    adocao2.adotar_gatinho(gato1)
+# Testando herança simples
+#gatinho3 = Gato("Bolinha", 2, "branco", "Siamês")
+#gatinho4 = Gato("Frajola", 1, "preto e branco", "Vira-lata")
+#print("Raça do gatinho 3:", gatinho3.get_raca())
 
-    # Testando herança e método abstrato
-    print(gato3.fazer_som())  # Imprime "Miau"
+# Testando herança múltipla
+
+# Criando uma instância de Animal e Adotante
+#animal01 = Animal("Whiskers", 2, "branco")
+#adotante01 = Adotante("João")
+
+# Criando uma instância de AdocaoGatinho
+#adocao = AdocaoGatinho(animal01, adotante01)
+
+# Acessando os atributos do animal e do adotante na instância de AdocaoGatinho
+#print("Nome do gatinho adotado:", adocao.animal.get_nome())
+#print("Idade do gatinho adotado:", adocao.animal.get_idade())
+#print("Cor do gatinho adotado:", adocao.animal.get_cor())
+#print("Nome do adotante:", adocao.adotante.nome)
+
+# Testando o método fazer_som() para classes abstratas
+
+#gatinho3 = Gato("Bolinha", 2, "branco", "Siamês")
+#gatinho4 = Gato("Frajola", 1, "preto e branco", "Vira-lata")
+
+#print("Som do gatinho 3:", gatinho3.fazer_som())
+#print("Som do gatinho 4:", gatinho4.fazer_som())
+
